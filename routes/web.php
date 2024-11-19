@@ -12,9 +12,10 @@ Route::get('/jobs/create', function (){
     return view('job.create');
 });
 
-Route::get('/jobs/{id}/edit', function ($id){
+Route::get('/jobs/{job}/edit', function (Job $job){
 
-    $job = Job::find($id);
+    // If you want to use an id of the table. No need to set the type of the parameter.
+    // $job = Job::find($id);
 
     return view('job.edit', ['job' => $job]);
 });
@@ -27,9 +28,9 @@ Route::get('/jobs', function () {
 });
 
 // SHOW
-Route::get('/jobs/{id}', function ($id) {
+Route::get('/jobs/{job}', function (Job $job) {
 
-    $job = Job::find($id);
+    // $job = Job::find($id);
 
     return view('job.show', ['job' => $job]);
 });
@@ -52,13 +53,13 @@ Route::post('/jobs', function (){
 });
 
 // UPDATE
-Route::patch('/jobs/{id}', function ($id) {
+Route::patch('/jobs/{job}', function (Job $job) {
     request()->validate([
         'title' => ['required', 'min:3'],
         'salary' => ['required', 'integer'],
     ]);
 
-    $job = Job::findOrFail($id);
+    // $job = Job::findOrFail($id);
 
     $job->update([
         'title' => request('title'),
@@ -70,9 +71,16 @@ Route::patch('/jobs/{id}', function ($id) {
 });
 
 // DELETE
-Route::delete('/jobs/{id}', function ($id) {
+Route::delete('/jobs/{job}', function (Job $job) {
     
-    Job::findOrFail($id)->delete();
+    // Job::findOrFail($id)->delete();
+
+    $job->delete();
 
     return redirect('/jobs');
 });
+
+// Route group...
+// Route::controller(JobController::class)->group(function (){
+//     Route::get('/jobs', 'index');
+// });
